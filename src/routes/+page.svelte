@@ -1,7 +1,32 @@
 <script>
+	import { onMount } from 'svelte';
 	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
+
+	let userData;
+	let isLoading = false;
+
+	let isError = '';
+
+	onMount(async () => {
+		try {
+			isLoading = true;
+			const res = await fetch('https://fake-user-nellcorp-challenge.vercel.app/user');
+
+			if (!res.ok) {
+				isLoading = false;
+				throw new Error(
+					'Ocorreu algum erro ao trazer os dados de usuário, por favor tente outra vez!'
+				);
+			}
+
+			const data = res.json();
+			userData = data;
+		} catch (error) {
+			if (error instanceof Error) isError = error.message;
+		} finally {
+			isLoading = false;
+		}
+	});
 </script>
 
 <svelte:head>
@@ -12,10 +37,10 @@
 <section>
 	<h1>
 		<span class="welcome">
-			<picture>
+			<!-- <picture>
 				<source srcset={welcome} type="image/webp" />
 				<img src={welcome_fallback} alt="Welcome" />
-			</picture>
+			</picture> -->
 		</span>
 
 		to your new<br />SvelteKit app
