@@ -1,5 +1,16 @@
 <script>
 	import { page } from '$app/stores';
+
+	import crescentLogo from '$lib/images/logo-crescente.svg';
+	import hamburger from '$lib/images/align-justify.svg';
+	import x from '$lib/images/x.svg';
+	import home from '$lib/images/home.svg';
+	import help from '$lib/images/help-circle.svg';
+	import settings from '$lib/images/sliders.svg';
+	import list from '$lib/images/list.svg';
+	import transactions from '$lib/images/repeat.svg';
+
+	let isMenuOpen = false;
 </script>
 
 <header>
