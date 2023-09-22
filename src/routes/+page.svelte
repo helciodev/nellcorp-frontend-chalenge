@@ -1,12 +1,15 @@
-<script lang="ts">
+<script>
 	import { onMount } from 'svelte';
 
 	import arrowUp from '$lib/images/arrow-up.svg';
 	import arrowDown from '$lib/images/arrow-down.svg';
 	import coin from '$lib/images/coin.png';
-	import type { UserData } from '../types';
+	import { json } from '@sveltejs/kit';
 
-	let userData: { basicInfo: { firstName: any; profilePic: any }; balance: any; transactions: any };
+	/**
+	 * @type {{ basicInfo: { firstName: any; profilePic: any; }; balance: any; transactions: any; }}
+	 */
+	let userData;
 	let isLoading = false;
 	let isShowBalance = false;
 	let isError = '';
@@ -73,7 +76,7 @@
 				<h2>Transações recentes</h2>
 			</div>
 			<div class="transactions">
-				{#each userData?.transactions as { id, type, evolvingParty, amount, balanceAfterTransaction, date } (id)}
+				{#each userData?.transactions as { id, type, evolvingParty, amount, balanceAfter, date } (id)}
 					<div class="transaction">
 						<div class="description">
 							<img src={coin} alt="icone representando uma moeda" width="28" height="28" />
@@ -86,10 +89,10 @@
 							/><span>{amount}</span>
 						</div>
 						<div class="balance-before">
-							{balanceAfterTransaction}
+							{balanceAfter}
 						</div>
 						<div class="when">
-							<!-- {date.getDate()}/ {getMonthExtended(date.getMonth())}/ {date.getFullYear()} -->
+							{date.split('-').join('/')}
 						</div>
 					</div>
 				{/each}
