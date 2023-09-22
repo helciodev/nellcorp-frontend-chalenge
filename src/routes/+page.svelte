@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 
 	import arrowUp from '$lib/images/arrow-up.svg';
 	import arrowDown from '$lib/images/arrow-down.svg';
@@ -28,7 +29,6 @@
 
 			const data = await res.json();
 			userData = data;
-			console.log(userData);
 		} catch (error) {
 			if (error instanceof Error) isError = error.message;
 		} finally {
@@ -42,17 +42,6 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<h1>
-	<span class="welcome">
-		<!-- <picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcome_fallback} alt="Welcome" />
-			</picture> -->
-	</span>
-
-	to your new<br />SvelteKit app
-</h1>
-
 <section>
 	{#if isLoading}
 		<p>loading</p>
@@ -62,13 +51,12 @@
 			<h1>Olá, {userData?.basicInfo.firstName}!</h1>
 
 			<img src={userData?.basicInfo.profilePic} alt="user profile pic" />
-
+			<button class="toggle-balance" on:click={() => (isShowBalance = !isShowBalance)}
+				>{!isShowBalance ? 'Ver Saldo' : 'Esconder saldo'}</button
+			>
 			<div class="balance">
 				{#if isShowBalance}
-					<button on:click={() => (isShowBalance = !isShowBalance)}>Esconder saldo</button>
-					<p>{userData?.balance}</p>
-				{:else}
-					<button on:click={() => (isShowBalance = !isShowBalance)}>ver</button>
+					<p transition:fade>{userData?.balance}</p>
 				{/if}
 			</div>
 
@@ -151,6 +139,25 @@
 	}
 	.user-initial img {
 		border-radius: 50%;
+	}
+
+	.toggle-balance {
+		margin-top: 16px;
+		background-color: var(--color-bg-2);
+		outline: none;
+		border: none;
+		color: #fff;
+		padding: 16px 24px;
+		text-align: center;
+		border-radius: 5px;
+		transition: all 0.3s ease-in;
+	}
+
+	.toggle-balance:hover {
+		background-color: var(--color-bg-1);
+		color: var(--color-text);
+		transform: translateY(-3px);
+		cursor: pointer;
 	}
 	.transactions {
 		background-color: var(--color-bg-3);
