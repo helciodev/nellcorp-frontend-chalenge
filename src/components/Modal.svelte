@@ -5,6 +5,9 @@
 	function close() {
 		isOpen = false;
 	}
+
+	import arrowUp from '$lib/images/arrow-up.svg';
+	import arrowDown from '$lib/images/arrow-down.svg';
 </script>
 
 {#if isOpen}
@@ -14,11 +17,21 @@
 		<div class="modal-content">
 			<span class="close" on:click={close}>&times;</span>
 			<div>
-				<p>{transactionData?.type}</p>
-				<p>{transactionData?.amount}</p>
-				<p>{transactionData?.evolvingParty}</p>
-				<p>{transactionData?.balanceAfter}</p>
-				<p>{transactionData?.date}</p>
+				<div class="profit-loss">
+					<p>{transactionData?.type === 'positive' ? 'Recebeu: ' : 'Gastou:'}</p>
+					<p>{transactionData?.amount} kz</p>
+				</div>
+				<div class="evolving-pary">
+					<p>{transactionData?.evolvingParty}</p>
+				</div>
+				<div class="balance-after">
+					<p>Saldo após operação:</p>
+					<p>{transactionData?.balanceAfter} kz</p>
+				</div>
+				<div class="when">
+					<p>data</p>
+					<p>{transactionData?.date}</p>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -38,7 +51,7 @@
 	}
 
 	.modal-content {
-		background-color: #fff;
+		background-color: var(--color-bg-1);
 		margin: 10% auto;
 		padding: 20px;
 		border: 1px solid #888;
@@ -55,7 +68,18 @@
 		cursor: pointer;
 	}
 
+	p {
+		font-size: 20px;
+		font-weight: bold;
+	}
 	.close:hover {
 		color: #000;
+	}
+
+	.balance-after,
+	.profit-loss,
+	.when {
+		display: flex;
+		gap: 8px;
 	}
 </style>
