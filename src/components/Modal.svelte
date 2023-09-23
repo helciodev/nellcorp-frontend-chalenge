@@ -5,9 +5,6 @@
 	function close() {
 		isOpen = false;
 	}
-
-	import arrowUp from '$lib/images/arrow-up.svg';
-	import arrowDown from '$lib/images/arrow-down.svg';
 </script>
 
 {#if isOpen}
