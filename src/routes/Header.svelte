@@ -1,129 +1,179 @@
 <script>
 	import { page } from '$app/stores';
-	import logo from '$lib/images/svelte-logo.svg';
-	import github from '$lib/images/github.svg';
+	import { onMount } from 'svelte';
+	import crescentLogo from '$lib/images/logo-crescente.svg';
+	import hamburger from '$lib/images/align-justify.svg';
+	import x from '$lib/images/x.svg';
+	import home from '$lib/images/home.svg';
+	import help from '$lib/images/help-circle.svg';
+	import settings from '$lib/images/sliders.svg';
+	import list from '$lib/images/list.svg';
+	import transactions from '$lib/images/repeat.svg';
+
+	let isMenuOpen = false;
+
+	/**
+	 * @type {number}
+	 */
+	let width;
+
+	onMount(() => {
+		width = window.innerWidth;
+		width = width;
+	});
+
+	function handleResize() {
+		if (window.innerWidth >= 720) {
+			isMenuOpen = true;
+		}
+	}
 </script>
 
+<svelte:window on:resize={handleResize} />
 <header>
-	<div class="corner">
-		<a href="https://kit.svelte.dev">
-			<img src={logo} alt="SvelteKit" />
-		</a>
-	</div>
-
-	<nav>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
-		</svg>
-		<ul>
-			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
-				<a href="/">Home</a>
-			</li>
-			<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
-				<a href="/about">About</a>
-			</li>
-			<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
-				<a href="/sverdle">Sverdle</a>
-			</li>
-		</ul>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
-		</svg>
-	</nav>
-
-	<div class="corner">
-		<a href="https://github.com/sveltejs/kit">
-			<img src={github} alt="GitHub" />
-		</a>
+	<div class="nav-container">
+		<div class="logo">
+			<a href="/"><img src={crescentLogo} width="168" height="90" alt="logo" /></a>
+		</div>
+		<button class="menu" on:click={() => (isMenuOpen = !isMenuOpen)}>
+			<img src="{isMenuOpen ? x : hamburger} " alt="menu" />
+		</button>
+		<div
+			on:click={() => (isMenuOpen = !isMenuOpen)}
+			aria-roledescription="close menu"
+			class="overlay {isMenuOpen ? '' : 'hidden'}"
+		/>
+		<nav class={isMenuOpen || width >= 720 ? 'nav-transform-0' : 'nav-transform-1000'}>
+			<ul>
+				<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
+					<img src={home} alt="" /><a href="/">Home</a>
+				</li>
+				<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
+					<img src={list} alt="" /><a href="/">Contas</a>
+				</li>
+				<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
+					<img src={transactions} alt="" /><a href="/transfer">Transferir</a>
+				</li>
+				<li aria-current={$page.url.pathname === '/help' ? 'page' : undefined}>
+					<img src={help} alt="" /><a href="/help">Ajuda</a>
+				</li>
+				<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
+					<img src={settings} alt="" /><a href="/">Configurações</a>
+				</li>
+			</ul>
+		</nav>
 	</div>
 </header>
 
 <style>
 	header {
+		position: relative;
+	}
+
+	.nav-container {
 		display: flex;
 		justify-content: space-between;
-	}
-
-	.corner {
-		width: 3em;
-		height: 3em;
-	}
-
-	.corner a {
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		position: fixed;
 		width: 100%;
-		height: 100%;
+		background-color: var(--color-bg-0);
+		border-bottom: 1px solid #5951b6;
 	}
-
-	.corner img {
-		width: 2em;
-		height: 2em;
-		object-fit: contain;
-	}
-
 	nav {
-		display: flex;
-		justify-content: center;
-		--background: rgba(255, 255, 255, 0.7);
+		position: absolute;
+		background-color: var(--color-bg-1);
+		top: 0;
+		height: 100vh;
+		z-index: 6;
+		width: 40vh;
 	}
 
-	svg {
-		width: 2em;
-		height: 3em;
-		display: block;
+	.nav-transform-1000 {
+		transform: translateX(-1000px);
+		transition: all 0.5s ease-in;
 	}
 
-	path {
-		fill: var(--background);
+	.nav-transform-0 {
+		transform: translateX(0);
+		transition: all 0.5s ease-in;
 	}
 
 	ul {
-		position: relative;
-		padding: 0;
-		margin: 0;
-		height: 3em;
 		display: flex;
+		flex-direction: column;
+		justify-content: start;
+		gap: 48px;
 		justify-content: center;
 		align-items: center;
-		list-style: none;
-		background: var(--background);
-		background-size: contain;
+		margin-top: 48px;
 	}
 
-	li {
-		position: relative;
-		height: 100%;
-	}
-
-	li[aria-current='page']::before {
-		--size: 6px;
-		content: '';
-		width: 0;
-		height: 0;
-		position: absolute;
-		top: 0;
-		left: calc(50% - var(--size));
-		border: var(--size) solid transparent;
-		border-top: var(--size) solid var(--color-theme-1);
-	}
-
-	nav a {
+	ul li {
 		display: flex;
-		height: 100%;
-		align-items: center;
-		padding: 0 0.5rem;
-		color: var(--color-text);
-		font-weight: 700;
-		font-size: 0.8rem;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		text-decoration: none;
-		transition: color 0.2s linear;
+		width: 100%;
+		gap: 6px;
+		font-size: 20px;
 	}
 
-	a:hover {
-		color: var(--color-theme-1);
+	li a {
+		text-decoration: none;
+		align-self: center;
+	}
+	.menu {
+		background-color: transparent;
+		outline: none;
+		border: none;
+		cursor: pointer;
+		z-index: 6;
+	}
+
+	.overlay {
+		position: absolute;
+		height: 100vh;
+		width: 100vh;
+		background: rgba(000, 000, 000, 0.4);
+		z-index: 4;
+	}
+
+	.hidden {
+		display: none;
+	}
+
+	@media (min-width: 720px) {
+		.nav-container {
+			justify-content: space-around;
+		}
+
+		nav {
+			position: static;
+			width: auto;
+			height: auto;
+			background-color: transparent;
+			transition: none;
+		}
+		.menu {
+			display: none;
+		}
+		.overlay {
+			display: none;
+		}
+		ul {
+			flex-direction: row;
+		}
+		li {
+			position: relative;
+		}
+		li::before {
+			content: '';
+			position: absolute;
+			bottom: -5px;
+			width: 0%;
+			height: 2px;
+			background-color: var(--color-bg-1);
+			transition: all 0.3s ease-out;
+		}
+
+		li:hover::before {
+			width: 100%;
+		}
 	}
 </style>
