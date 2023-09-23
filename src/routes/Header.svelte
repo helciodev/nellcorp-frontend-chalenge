@@ -1,6 +1,6 @@
 <script>
 	import { page } from '$app/stores';
-
+	import { onMount } from 'svelte';
 	import crescentLogo from '$lib/images/logo-crescente.svg';
 	import hamburger from '$lib/images/align-justify.svg';
 	import x from '$lib/images/x.svg';
@@ -11,8 +11,25 @@
 	import transactions from '$lib/images/repeat.svg';
 
 	let isMenuOpen = false;
+
+	/**
+	 * @type {number}
+	 */
+	let width;
+
+	onMount(() => {
+		width = window.innerWidth;
+		width = width;
+	});
+
+	function handleResize() {
+		if (window.innerWidth >= 720) {
+			isMenuOpen = true;
+		}
+	}
 </script>
 
+<svelte:window on:resize={handleResize} />
 <header>
 	<div class="nav-container">
 		<div class="logo">
@@ -26,7 +43,7 @@
 			aria-roledescription="close menu"
 			class="overlay {isMenuOpen ? '' : 'hidden'}"
 		/>
-		<nav class={isMenuOpen ? 'nav-transform-0' : 'nav-transform-1000'}>
+		<nav class={isMenuOpen || width >= 720 ? 'nav-transform-0' : 'nav-transform-1000'}>
 			<ul>
 				<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
 					<img src={home} alt="" /><a href="/">Home</a>
@@ -119,5 +136,44 @@
 
 	.hidden {
 		display: none;
+	}
+
+	@media (min-width: 720px) {
+		.nav-container {
+			justify-content: space-around;
+		}
+
+		nav {
+			position: static;
+			width: auto;
+			height: auto;
+			background-color: transparent;
+			transition: none;
+		}
+		.menu {
+			display: none;
+		}
+		.overlay {
+			display: none;
+		}
+		ul {
+			flex-direction: row;
+		}
+		li {
+			position: relative;
+		}
+		li::before {
+			content: '';
+			position: absolute;
+			bottom: -5px;
+			width: 0%;
+			height: 2px;
+			background-color: var(--color-bg-1);
+			transition: all 0.3s ease-out;
+		}
+
+		li:hover::before {
+			width: 100%;
+		}
 	}
 </style>

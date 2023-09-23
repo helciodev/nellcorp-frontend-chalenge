@@ -44,7 +44,7 @@
 
 <section>
 	{#if isLoading}
-		<p>loading</p>
+		<p>Carregando...</p>
 	{/if}
 	{#if userData}
 		<div class="user-initial">
@@ -109,6 +109,10 @@
 		padding: 8px 0px;
 	}
 
+	iframe {
+		border: none;
+		outline: none;
+	}
 	.welcome {
 		display: block;
 		position: relative;
@@ -163,7 +167,6 @@
 		background-color: var(--color-bg-3);
 		padding: 5px 7px;
 		border-radius: 5px;
-		width: 100%;
 	}
 	.transaction {
 		padding: 4px 3px;
@@ -203,5 +206,11 @@
 
 	.when {
 		width: 20%;
+	}
+
+	@media (min-width: 720px) {
+		.transactions {
+			width: 150%;
+		}
 	}
 </style>
