@@ -1,11 +1,12 @@
 <script>
+	// @ts-nocheck
+
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-
+	import Modal from '../components/Modal.svelte';
 	import arrowUp from '$lib/images/arrow-up.svg';
 	import arrowDown from '$lib/images/arrow-down.svg';
 	import coin from '$lib/images/coin.png';
-	import { json } from '@sveltejs/kit';
 
 	/**
 	 * @type {{ basicInfo: { firstName: any; profilePic: any; }; balance: any; transactions: any; }}
@@ -14,6 +15,14 @@
 	let isLoading = false;
 	let isShowBalance = false;
 	let isError = '';
+
+	let transactionData = null;
+
+	let showModal = false;
+
+	function openModal() {
+		showModal = true;
+	}
 
 	onMount(async () => {
 		try {
@@ -43,6 +52,7 @@
 </svelte:head>
 
 <section>
+	<Modal bind:isOpen={showModal} {transactionData} />
 	{#if isLoading}
 		<p>Carregando...</p>
 	{/if}
@@ -65,7 +75,13 @@
 			</div>
 			<div class="transactions">
 				{#each userData?.transactions as { id, type, evolvingParty, amount, balanceAfter, date } (id)}
-					<div class="transaction">
+					<div
+						class="transaction"
+						on:click={() => {
+							openModal();
+							transactionData = { id, type, evolvingParty, amount, amount, balanceAfter, date };
+						}}
+					>
 						<div class="description">
 							<img src={coin} alt="icone representando uma moeda" width="28" height="28" />
 							<span>{evolvingParty}</span>
